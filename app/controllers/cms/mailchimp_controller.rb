@@ -6,14 +6,17 @@ module CMS
       respond_to do |format|
         format.js do
           begin
-            gb = Gibbon::API.new(Rails.application.secrets.mailchimp_api_key, { timeout: 15 })
-            gb.lists.subscribe(
-              id: Rails.application.secrets.send(:"mailchimp_list_id_#{I18n.locale}"),
-              email: { email: params[:mailchimp][:email] },
-              double_optin: false
-            )
+            md5_email = Digest::MD5.hexdigest(params[:mailchimp][:email].downcase)
+            gibbon = Gibbon::Request.new(api_key: Rails.application.secrets.mailchimp_api_key)
+            gibbon.lists(Rails.application.secrets.send(:"mailchimp_list_id_#{I18n.locale}"))
+                  .members(md5_email)
+                  .upsert(body: {
+                    email_address: params[:mailchimp][:email],
+                    status: "pending"
+                  })
             flash_now!(:success)
           rescue Gibbon::MailChimpError => exception
+            puts exception.to_s
             cms_logger exception, 'mailchimp'
             flash_now!(:error)
           end
