@@ -11,6 +11,7 @@ module Admin
           field :image, :rich_picker do
             config scoped: 'cms'
           end
+          field :text, :rich_editor, scoped: 'cms'
         end
       end
     end
