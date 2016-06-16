@@ -15,7 +15,7 @@ module CMS
             flash_now!(:success)
           rescue Gibbon::MailChimpError => exception
             cms_logger exception, 'mailchimp'
-            flash_now!(:error) = I18n.t('flash_messages.mailchimp.subscribe.error')
+            flash_now!(:error, I18n.t('flash_messages.mailchimp.subscribe.error'))
           end
         end
       end
