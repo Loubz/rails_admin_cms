@@ -18,6 +18,7 @@ module CMS
           rescue Gibbon::MailChimpError => exception
             puts exception.to_s
             cms_logger exception, 'mailchimp'
+            cms_logger exception.code, 'mailchimp_code'
             flash_now!(:error)
           end
         end
