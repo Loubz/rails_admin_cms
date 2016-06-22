@@ -12,10 +12,10 @@ module CMS
               email: { email: params[:mailchimp][:email] },
               double_optin: false
             )
-            flash_now!(:success)
+            flash.now[:success] = I18n.t('flash_messages.mailchimp.subscribe.success')
           rescue Gibbon::MailChimpError => exception
             cms_logger exception, 'mailchimp'
-            flash_now!(:error, I18n.t('flash_messages.mailchimp.subscribe.error'))
+            flash.now[:error] = I18n.t('flash_messages.mailchimp.subscribe.error')
           end
         end
       end
